@@ -31,6 +31,7 @@ def split_to_batches(l, n):
 
 def latent_representation(image,image_size=256,learning_rate=1,iterations=1000,randomize_noise=False):
     ref_images = [image]
+    print(ref_images)
     batch_size = 1
     tflib.init_tf()
     perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
