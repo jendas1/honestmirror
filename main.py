@@ -125,7 +125,7 @@ def questionnaire(update, context):
             chat_id=update.effective_chat.id,
             text='You have answered all the questions for today. Here is how your portrait look like')
         update_photo(f'{username}.gif',user_data[username],username)
-        context.bot.send_photo(chat_id=update.effective_chat.id, photo=open(f'{username}.gif', 'rb'))
+        context.bot.sendAnimation(chat_id=update.effective_chat.id, animation=open(f'{username}.gif', 'rb'))
         return
     if len(answers) < len(questions):
         bot_question = questions[len(answers)]
