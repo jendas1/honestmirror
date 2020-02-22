@@ -76,3 +76,29 @@ def generate_image(latent_vector):
     img_array = generator.generate_images()[0]
     img = PIL.Image.fromarray(img_array, 'RGB')
     return img
+
+
+def align_image(filename):
+    import os
+    import sys
+    import bz2
+    from keras.utils import get_file
+    from ffhq_dataset.face_alignment import image_align
+    from ffhq_dataset.landmarks_detector import LandmarksDetector
+
+    LANDMARKS_MODEL_URL = 'http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2'
+
+    def unpack_bz2(src_path):
+        data = bz2.BZ2File(src_path).read()
+        dst_path = src_path[:-4]
+        with open(dst_path, 'wb') as fp:
+            fp.write(data)
+        return dst_path
+    landmarks_model_path = unpack_bz2(get_file('shape_predictor_68_face_landmarks.dat.bz2',
+                                               LANDMARKS_MODEL_URL, cache_subdir='temp'))
+
+    landmarks_detector = LandmarksDetector(landmarks_model_path)
+    for i, face_landmarks in enumerate(landmarks_detector.get_landmarks(filename), start=1):
+        face_img_name = '%s.png' % os.path.splitext(filename)[0]
+        aligned_face_path = face_img_name
+        image_align(filename, aligned_face_path, face_landmarks)

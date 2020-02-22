@@ -61,8 +61,11 @@ def selfie(update, context):
     username = update.effective_chat.username
     if update.message.photo:
         file = context.bot.getFile(update.message.photo[-1].file_id)
+        # todo  align_images.py raw_images aligned_images
         selfie_filename = f'{username}.jpg'
         file.download(selfie_filename)
+        align_image(selfie_filename)
+        selfie_filename = f'{username}.png'
         lalent_repr = latent_representation(selfie_filename)
         np.save(username,lalent_repr)
     context.bot.send_message(
