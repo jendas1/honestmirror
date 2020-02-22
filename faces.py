@@ -34,6 +34,10 @@ def latent_representation(image,image_size=256,learning_rate=1,iterations=1000,r
     print(ref_images)
     batch_size = 1
     tflib.init_tf()
+    with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
+        generator_network, discriminator_network, Gs_network = pickle.load(f)
+
+    generator = Generator(Gs_network, args.batch_size, randomize_noise=args.randomize_noise)
     perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
     perceptual_model.build_perceptual_model(generator.generated_image)
 
