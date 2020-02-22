@@ -68,12 +68,7 @@ def generate_gif(latent_vectors,filename):
     images[0].save(filename, format='GIF', append_images=images[1:], save_all=True, duration=40, loop=1)
 
 def generate_images(latent_vectors):
-    generator.set_dlatents(latent_vectors)
-    img_array = generator.generate_images()
-    imgs = []
-    for img in img_array:
-        imgs.append(PIL.Image.fromarray(img_array, 'RGB'))
-    return imgs
+    return [generate_image(vec) for vec in latent_vectors]
 
 def generate_image(latent_vector):
     latent_vector = latent_vector.reshape((1, 18, 512))

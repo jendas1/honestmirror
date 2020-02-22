@@ -97,7 +97,7 @@ def questionnaire(update, context):
     username = update.effective_chat.username
     user_data = load_all()
     if username not in user_data:
-        user_data[username] = {'answers': {},"mood_score":0}
+        user_data[username] = {'answers': {}, "mood_score": 0, "mood_diff": 0}
     current_answer_num = len(user_data[username]['answers'].keys()) - 1
     logging.info(f'current_answer_num {current_answer_num}')
     user_data[username]['answers'][questions[current_answer_num - 1]] = update.message.text
