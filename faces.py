@@ -18,7 +18,8 @@ with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
     generator_network, discriminator_network, Gs_network = pickle.load(f)
 
 generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
-
+perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
+perceptual_model.build_perceptual_model(generator.generated_image)
 
 smile_direction = np.load('ffhq_dataset/latent_directions/smile.npy')
 gender_direction = np.load('ffhq_dataset/latent_directions/gender.npy')
@@ -39,9 +40,9 @@ def latent_representation(image,image_size=256,learning_rate=1,iterations=50,ran
     #    generator_network, discriminator_network, Gs_network = pickle.load(f)
 
     #generator = Generator(Gs_network, batch_size, randomize_noise=randomize_noise)
-    perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
-    with tf.variable_scope(tf.get_variable_scope(), reuse=True):
-        perceptual_model.build_perceptual_model(generator.generated_image)
+    # perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
+    # with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+    #     perceptual_model.build_perceptual_model(generator.generated_image)
 
     # Optimize (only) dlatents by minimizing perceptual loss between reference and generated images in feature space
     for images_batch in tqdm(split_to_batches(ref_images, batch_size), total=len(ref_images) // batch_size):
