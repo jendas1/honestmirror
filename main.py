@@ -11,7 +11,8 @@ import subprocess
 from faces import *
 
 BAD_EMOTION_THRESHOLD = 4
-TOKEN = "868031376:AAGdASZ8GANAa3L5nyHZEZiHX4Yais8_DCg"
+#TOKEN = "868031376:AAGdASZ8GANAa3L5nyHZEZiHX4Yais8_DCg"
+TOKEN = "1087806422:AAE6yTwZ0_1MkIDL_Ldou6EE3vYPXzX85iE"
 os.environ['TOKEN'] = TOKEN
 updater = Updater(token=os.environ.get('TOKEN'), use_context=True)
 dispatcher = updater.dispatcher
@@ -21,9 +22,9 @@ DEBUG = 1
 
 questions = [
     '',
-    'How do you feel right now?',
+    'What have you learned today?',
     'Have you helped anyone today? How?',
-    'What are you grateful for?',
+    'What is your goal for tomorrow?',
     "How is your mood today? (answer with emoji)"
 ]
 
@@ -36,7 +37,7 @@ with open("emojimap.json", "r") as fp:
 def start(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="I'm a bot, please send me a selfie to start!")
+        text="Hello, have you ever thought about having a mirror of your soul? I am here to provide you that. Please send me a selfie to begin.")
 
 
 def next_day(update, context):
@@ -88,7 +89,7 @@ def selfie(update, context):
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Would you like to start mental state questionnaire now?')
+        text="What about reviewing your day?")
     
 
 
@@ -131,6 +132,8 @@ def questionnaire(update, context):
             if state_bad:
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="Hey! You've been constantly in a bad mood for 4 days. Maybe you should talk to your relatives or seek some aid?")
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text="There are 14 professionals in your neighbourhood, should I give you the numbers for the ones with best reviews?")
     answers = user_data[username]['answers']
 
     save_all(user_data)
@@ -138,7 +141,7 @@ def questionnaire(update, context):
     if current_answer_num + 2 >= len(questions):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='You have answered all the questions for today. Here is how your portrait look like')
+            text='You have answered all questions for today. Here is your updated portrait:')
         update_photo(f'{username}.gif',user_data[username],username)
         #context.bot.sendAnimation(chat_id=update.effective_chat.id, animation=open(f'{username}.gif', 'rb'))
         context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}.gif', 'rb'))
