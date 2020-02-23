@@ -72,8 +72,10 @@ def selfie(update, context):
         align_image(selfie_filename)
         selfie_filename = f'{username}.png'
         lalent_repr = latent_representation(selfie_filename)
+        image = generate_image(lalent_repr)
+        image.save(f'{username}_initial.jpg',"JPEG")
         np.save(username,lalent_repr)
-    context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}.png', 'rb'))
+    context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}_initial.jpg', 'rb'))
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='Here is how you look in the honest mirror now! Just as in the reality, good starting point.')
