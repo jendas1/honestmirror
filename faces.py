@@ -3,18 +3,13 @@ import pickle
 from tqdm import tqdm
 import PIL.Image
 import numpy as np
-import dnnlib
-import dnnlib.tflib as tflib
+
 import config
 # import tensorflow as tf
-from encoder.generator_model import Generator
+
 
 URL_FFHQ = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ'  # karras2019stylegan-ffhq-1024x1024.pkl
-tflib.init_tf()
-with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
-    generator_network, discriminator_network, Gs_network = pickle.load(f)
 
-generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
 # perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
 # perceptual_model.build_perceptual_model(generator.generated_image)
 
@@ -91,6 +86,14 @@ def generate_images(latent_vectors):
     return [generate_image(vec) for vec in latent_vectors]
 
 def generate_image(latent_vector):
+    from encoder.generator_model import Generator
+    import dnnlib
+    import dnnlib.tflib as tflib
+    tflib.init_tf()
+    with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
+        generator_network, discriminator_network, Gs_network = pickle.load(f)
+
+    generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
     latent_vector = latent_vector.reshape((1, 18, 512))
     generator.set_dlatents(latent_vector)
     img_array = generator.generate_images()[0]
