@@ -30,6 +30,22 @@ def split_to_batches(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
+# def get_model():
+    # global graph
+    # graph = tf.get_default_graph()
+    # with graph.as_default():
+    # global model
+    # model = load_model('model_WheelPrediction.h5')
+# Then in the app.route:
+# @app.route("/predict", methods=["POST"])
+# def predict():
+    # with graph.as_default():
+    # message = request.get_json(force=True)
+    # encoded = message['image']
+    # decoded = base64.b64decode(encoded)
+    # image = Image.open(io.BytesIO(decoded))
+    # processed_image = preprocess_image(image, target_size=(224, 224))
+    # prediction = model.predict(processed_image).tolist()
 
 def latent_representation(image,image_size=256,learning_rate=1,iterations=50,randomize_noise=False):
     ref_images = [image]
@@ -47,14 +63,15 @@ def latent_representation(image,image_size=256,learning_rate=1,iterations=50,ran
     # Optimize (only) dlatents by minimizing perceptual loss between reference and generated images in feature space
     for images_batch in tqdm(split_to_batches(ref_images, batch_size), total=len(ref_images) // batch_size):
         with tf.variable_scope(tf.get_variable_scope(), reuse=True):
-            perceptual_model.set_reference_images(images_batch)
-        op = perceptual_model.optimize(generator.dlatent_variable, iterations=iterations, learning_rate=learning_rate)
-        pbar = tqdm(op, leave=False, total=iterations)
-        for loss in pbar:
-            pbar.set_description(' Loss: %.2f' % loss)
-        print(' ', ' loss:', loss)
-        generated_dlatents = generator.get_dlatents()
-        generator.reset_dlatents()
+            with generator.graph.as_default():
+                perceptual_model.set_reference_images(images_batch)
+                op = perceptual_model.optimize(generator.dlatent_variable, iterations=iterations, learning_rate=learning_rate)
+                pbar = tqdm(op, leave=False, total=iterations)
+                for loss in pbar:
+                    pbar.set_description(' Loss: %.2f' % loss)
+                print(' ', ' loss:', loss)
+                generated_dlatents = generator.get_dlatents()
+                generator.reset_dlatents()
     return generated_dlatents
 
 
