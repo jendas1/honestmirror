@@ -71,7 +71,7 @@ def selfie(update, context):
         import os
         if not os.path.exists(username):
             os.makedirs(username)
-        selfie_filename = f'{username}/raw_photo.jpg'
+        selfie_filename = f'{username}/{username}.jpg'
         file.download(selfie_filename)
         root = "."
         subprocess.run(["python", "encode_images.py", "--src_dir", username,"--generated_images_dir",root ,"--dlatent_dir",root])
@@ -81,7 +81,7 @@ def selfie(update, context):
         # image = generate_image(lalent_repr)
         # image.save(f'{username}_initial.jpg',"JPEG")
         # np.save(username,lalent_repr)
-    context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}_initial.jpg', 'rb'))
+    context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}.png', 'rb'))
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='Here is how you look in the honest mirror now! Just as in the reality, good starting point.')
