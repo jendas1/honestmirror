@@ -75,7 +75,7 @@ def generate_image(latent_vector):
     generator.set_dlatents(latent_vector)
     img_array = generator.generate_images()[0]
     img = PIL.Image.fromarray(img_array, 'RGB')
-    return img
+    return img.resize((512, 512))
 
 
 def align_image(filename):
