@@ -3,3 +3,4 @@ numpy
 matplotlib
 python-telegram-bot
 python-dateutil
+tqdm

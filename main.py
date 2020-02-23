@@ -7,6 +7,7 @@ import numpy as np
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from pickler import get_full_user_data, save_user_data, save_all, load_all
 from json import load, dump
+import subprocess
 from faces import *
 
 BAD_EMOTION_THRESHOLD = 4
@@ -67,14 +68,19 @@ def selfie(update, context):
             text='Analyzing the photo, may take a while...')
         file = context.bot.getFile(update.message.photo[-1].file_id)
         # todo  align_images.py raw_images aligned_images
-        selfie_filename = f'{username}.jpg'
+        import os
+        if not os.path.exists(username):
+            os.makedirs(username)
+        selfie_filename = f'{username}/raw_photo.jpg'
         file.download(selfie_filename)
-        align_image(selfie_filename)
-        selfie_filename = f'{username}.png'
-        lalent_repr = latent_representation(selfie_filename)
-        image = generate_image(lalent_repr)
-        image.save(f'{username}_initial.jpg',"JPEG")
-        np.save(username,lalent_repr)
+        root = "."
+        subprocess.run(["python", "encode_images.py", "--src_dir", username,"--generated_images_dir",root ,"--dlatent_dir",root])
+        # align_image(selfie_filename)
+        # selfie_filename = f'{username}.png'
+        # lalent_repr = latent_representation(selfie_filename)
+        # image = generate_image(lalent_repr)
+        # image.save(f'{username}_initial.jpg',"JPEG")
+        # np.save(username,lalent_repr)
     context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}_initial.jpg', 'rb'))
     context.bot.send_message(
         chat_id=update.effective_chat.id,

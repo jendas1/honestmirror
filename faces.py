@@ -18,8 +18,8 @@ with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
     generator_network, discriminator_network, Gs_network = pickle.load(f)
 
 generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
-perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
-perceptual_model.build_perceptual_model(generator.generated_image)
+# perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
+# perceptual_model.build_perceptual_model(generator.generated_image)
 
 smile_direction = np.load('ffhq_dataset/latent_directions/smile.npy')
 gender_direction = np.load('ffhq_dataset/latent_directions/gender.npy')
@@ -47,32 +47,33 @@ def split_to_batches(l, n):
     # processed_image = preprocess_image(image, target_size=(224, 224))
     # prediction = model.predict(processed_image).tolist()
 
-def latent_representation(image,image_size=256,learning_rate=1,iterations=50,randomize_noise=False):
-    ref_images = [image]
-    print(ref_images)
-    batch_size = 1
-    tflib.init_tf()
-    #with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
-    #    generator_network, discriminator_network, Gs_network = pickle.load(f)
 
-    #generator = Generator(Gs_network, batch_size, randomize_noise=randomize_noise)
-    # perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
-    # with tf.variable_scope(tf.get_variable_scope(), reuse=True):
-    #     perceptual_model.build_perceptual_model(generator.generated_image)
-
-    # Optimize (only) dlatents by minimizing perceptual loss between reference and generated images in feature space
-    for images_batch in tqdm(split_to_batches(ref_images, batch_size), total=len(ref_images) // batch_size):
-        with tf.variable_scope(tf.get_variable_scope(), reuse=True):
-            with generator.graph.as_default():
-                perceptual_model.set_reference_images(images_batch)
-                op = perceptual_model.optimize(generator.dlatent_variable, iterations=iterations, learning_rate=learning_rate)
-                pbar = tqdm(op, leave=False, total=iterations)
-                for loss in pbar:
-                    pbar.set_description(' Loss: %.2f' % loss)
-                print(' ', ' loss:', loss)
-                generated_dlatents = generator.get_dlatents()
-                generator.reset_dlatents()
-    return generated_dlatents
+# def latent_representation(image,image_size=256,learning_rate=1,iterations=50,randomize_noise=False):
+#     ref_images = [image]
+#     print(ref_images)
+#     batch_size = 1
+#     tflib.init_tf()
+#     #with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
+#     #    generator_network, discriminator_network, Gs_network = pickle.load(f)
+#
+#     #generator = Generator(Gs_network, batch_size, randomize_noise=randomize_noise)
+#     # perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
+#     # with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+#     #     perceptual_model.build_perceptual_model(generator.generated_image)
+#
+#     # Optimize (only) dlatents by minimizing perceptual loss between reference and generated images in feature space
+#     for images_batch in tqdm(split_to_batches(ref_images, batch_size), total=len(ref_images) // batch_size):
+#         with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+#             with generator.graph.as_default():
+#                 perceptual_model.set_reference_images(images_batch)
+#                 op = perceptual_model.optimize(generator.dlatent_variable, iterations=iterations, learning_rate=learning_rate)
+#                 pbar = tqdm(op, leave=False, total=iterations)
+#                 for loss in pbar:
+#                     pbar.set_description(' Loss: %.2f' % loss)
+#                 print(' ', ' loss:', loss)
+#                 generated_dlatents = generator.get_dlatents()
+#                 generator.reset_dlatents()
+#     return generated_dlatents
 
 
 
