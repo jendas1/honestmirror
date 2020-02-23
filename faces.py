@@ -29,7 +29,7 @@ def split_to_batches(l, n):
         yield l[i:i + n]
 
 
-def latent_representation(image,image_size=256,learning_rate=1,iterations=1000,randomize_noise=False):
+def latent_representation(image,image_size=256,learning_rate=1,iterations=50,randomize_noise=False):
     ref_images = [image]
     print(ref_images)
     batch_size = 1
@@ -65,6 +65,7 @@ def morph_latent(alpha,move_strength=1.0,steps=10,me_pt=None,direction=smile_dir
 def generate_gif(latent_vectors,filename):
     images = generate_images(latent_vectors)
     # Save into a GIF file that loops forever
+    length = len(images)
     images[0].save(filename, format='GIF', append_images=images[1:], save_all=True, duration=40, loop=1)
 
 def generate_images(latent_vectors):

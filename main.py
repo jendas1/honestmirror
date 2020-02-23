@@ -16,6 +16,8 @@ updater = Updater(token=os.environ.get('TOKEN'), use_context=True)
 dispatcher = updater.dispatcher
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
+DEBUG = 1
+
 questions = [
     '',
     'How do you feel right now?',
@@ -60,6 +62,9 @@ def selfie(update, context):
 def selfie(update, context):
     username = update.effective_chat.username
     if update.message.photo:
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text='Analyzing the photo, may take a while...')
         file = context.bot.getFile(update.message.photo[-1].file_id)
         # todo  align_images.py raw_images aligned_images
         selfie_filename = f'{username}.jpg'
@@ -68,9 +73,11 @@ def selfie(update, context):
         selfie_filename = f'{username}.png'
         lalent_repr = latent_representation(selfie_filename)
         np.save(username,lalent_repr)
+    context.bot.send_document(chat_id=update.effective_chat.id, document=open(f'{username}.png', 'rb'))
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Selfie saved, thanks!')
+        text='Here is how you look in the honest mirror now! Just as in the reality, good starting point.')
+
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='Would you like to start mental state questionnaire now?')
