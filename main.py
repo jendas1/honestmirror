@@ -11,8 +11,8 @@ import subprocess
 from faces import *
 
 BAD_EMOTION_THRESHOLD = 4
-#TOKEN = "868031376:AAGdASZ8GANAa3L5nyHZEZiHX4Yais8_DCg"
-TOKEN = "1087806422:AAE6yTwZ0_1MkIDL_Ldou6EE3vYPXzX85iE"
+TOKEN = "868031376:AAGdASZ8GANAa3L5nyHZEZiHX4Yais8_DCg"
+#TOKEN = "1087806422:AAE6yTwZ0_1MkIDL_Ldou6EE3vYPXzX85iE"
 os.environ['TOKEN'] = TOKEN
 updater = Updater(token=os.environ.get('TOKEN'), use_context=True)
 dispatcher = updater.dispatcher
