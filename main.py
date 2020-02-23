@@ -74,7 +74,7 @@ def selfie(update, context):
         selfie_filename = f'{username}/{username}.jpg'
         file.download(selfie_filename)
         root = "."
-        subprocess.run(["python", "encode_images.py", "--src_dir", username,"--generated_images_dir",root ,"--dlatent_dir",root])
+        subprocess.run(["python", "encode_images.py", "--src_dir", username,"--generated_images_dir",root ,"--dlatent_dir",root,"--iterations",250])
         # align_image(selfie_filename)
         # selfie_filename = f'{username}.png'
         # lalent_repr = latent_representation(selfie_filename)
