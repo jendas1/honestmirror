@@ -49,7 +49,7 @@ def latent_representation(image,learning_rate=1,iterations=50):
 
 latent_representation.generator = Generator(Gs_network, 1, randomize_noise=False)
 latent_representation.perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
-latent_representation.perceptual_model.build_perceptual_model(generator.generated_image)
+latent_representation.perceptual_model.build_perceptual_model(latent_representation.generator)
 
 def morph_latent(alpha,move_strength=1.0,steps=10,me_pt=None,direction=smile_direction+age_direction):
     z = np.empty((steps, 18, 512))
