@@ -11,13 +11,13 @@ import tensorflow as tf
 from encoder.generator_model import Generator
 from encoder.perceptual_model import PerceptualModel
 
-URL_FFHQ = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ'  # karras2019stylegan-ffhq-1024x1024.pkl
-
-tflib.init_tf()
-with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
-    generator_network, discriminator_network, Gs_network = pickle.load(f)
-
-generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
+# URL_FFHQ = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ'  # karras2019stylegan-ffhq-1024x1024.pkl
+#
+# tflib.init_tf()
+# with dnnlib.util.open_url(URL_FFHQ, cache_dir=config.cache_dir) as f:
+#     generator_network, discriminator_network, Gs_network = pickle.load(f)
+#
+# generator = Generator(Gs_network, batch_size=1, randomize_noise=False)
 # perceptual_model = PerceptualModel(256, layer=9, batch_size=1)
 # perceptual_model.build_perceptual_model(generator.generated_image)
 
