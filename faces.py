@@ -7,6 +7,7 @@ import numpy as np
 import dnnlib
 import dnnlib.tflib as tflib
 import config
+import tensorflow as tf
 from encoder.generator_model import Generator
 from encoder.perceptual_model import PerceptualModel
 
@@ -39,11 +40,13 @@ def latent_representation(image,image_size=256,learning_rate=1,iterations=50,ran
 
     #generator = Generator(Gs_network, batch_size, randomize_noise=randomize_noise)
     perceptual_model = PerceptualModel(image_size, layer=9, batch_size=batch_size)
-    perceptual_model.build_perceptual_model(generator.generated_image)
+    with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+        perceptual_model.build_perceptual_model(generator.generated_image)
 
     # Optimize (only) dlatents by minimizing perceptual loss between reference and generated images in feature space
     for images_batch in tqdm(split_to_batches(ref_images, batch_size), total=len(ref_images) // batch_size):
-        perceptual_model.set_reference_images(images_batch)
+        with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+            perceptual_model.set_reference_images(images_batch)
         op = perceptual_model.optimize(generator.dlatent_variable, iterations=iterations, learning_rate=learning_rate)
         pbar = tqdm(op, leave=False, total=iterations)
         for loss in pbar:
