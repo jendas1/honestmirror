@@ -58,7 +58,7 @@ def latent_representation(image,image_size=256,learning_rate=1,iterations=1000,r
 def morph_latent(alpha,move_strength=1.0,steps=10,me_pt=None,direction=smile_direction+age_direction):
     z = np.empty((steps, 18, 512))
     for i, cur_alpha in enumerate(np.linspace(start=alpha, stop=alpha+move_strength, num=steps)):
-        z[i] = me_pt + direction * alpha
+        z[i] = me_pt + direction * cur_alpha
     return z
 
 
