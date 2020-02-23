@@ -1,15 +1,15 @@
-import os
-import argparse
-import pickle
-from tqdm import tqdm
+# import os
+# import argparse
+# import pickle
+# from tqdm import tqdm
 import PIL.Image
 import numpy as np
-import dnnlib
-import dnnlib.tflib as tflib
-import config
-import tensorflow as tf
-from encoder.generator_model import Generator
-from encoder.perceptual_model import PerceptualModel
+# import dnnlib
+# import dnnlib.tflib as tflib
+# import config
+# import tensorflow as tf
+# from encoder.generator_model import Generator
+# from encoder.perceptual_model import PerceptualModel
 
 # URL_FFHQ = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ'  # karras2019stylegan-ffhq-1024x1024.pkl
 #
